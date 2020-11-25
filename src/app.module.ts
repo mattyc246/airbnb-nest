@@ -1,13 +1,17 @@
 import { Module } from '@nestjs/common';
 import { Connection } from "typeorm"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { UserHttpModule } from "./users/user-http.module"
+import { AppController } from "./app.controller"
+import { UsersModule } from './users/users.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    UserHttpModule
-  ]
+    UsersModule,
+    AuthenticationModule
+  ],
+  controllers: [AppController]
 })
 
 export class AppModule {
