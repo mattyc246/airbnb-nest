@@ -1,13 +1,24 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { UsersService } from "../users/users.service"
+import { TokenPayload } from './interfaces/tokenPayload.interface';
 
 const bcrypt = require('bcrypt')
 
 @Injectable()
 export class AuthenticationService {
   constructor(
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService
   ) {}
+
+  public cookieWithJwtToken(userId: number){
+    const payload: TokenPayload = { userId };
+    const token = this.jwtService.sign(payload);
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_EXPIRATION_TIME')}`;
+  }
 
   public async authenticateUser(email: string, hashedPassword: string) {
     try {
