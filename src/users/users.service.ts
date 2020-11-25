@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './user.entity';
+import { PostgresErrorCode } from "../database/postgresErrorCodes.enum"
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -12,9 +13,17 @@ export class UsersService {
   ) {}
 
   async create(user: CreateUserDto): Promise<User> {
-    const newUser = await this.usersRepository.create(user);
-    await this.usersRepository.save(newUser)
-    return newUser;
+    try {
+      const newUser = await this.usersRepository.create(user);
+      await this.usersRepository.save(newUser)
+      newUser.password = undefined
+      return newUser;
+    } catch (error) {
+      if(error?.code === PostgresErrorCode.UniqueViolation){
+        throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST)
+      }
+      throw new HttpException('Something went wrong', HttpStatus.INTERNAL_SERVER_ERROR)
+    }
   }
 
   findAll(): Promise<User[]> {
