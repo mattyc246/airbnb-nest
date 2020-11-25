@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post } from "@nestjs/common"
-import { create } from "domain"
+import { Controller, Get, Post, HttpCode, UseGuards, Req } from "@nestjs/common"
 import { AuthenticationService } from "./authentication/authentication.service"
-import { CreateSessionDto } from "./authentication/dto/create-session.dto"
+import { RequestWithUser } from "./authentication/interfaces/requestWithUser.interface"
+import { LocalAuthenticationGuard } from "./authentication/localAuthentication.guard"
+import { User } from "./users/entities/user.entity"
 
 @Controller()
 export class AppController {
@@ -12,10 +13,12 @@ export class AppController {
     return "Hello World!"
   }
 
+  @HttpCode(200)
+  @UseGuards(LocalAuthenticationGuard)
   @Post('/login')
-  async login(@Body() createSessionDto: CreateSessionDto): Promise<string>{
-    const res = await this.authenticationService.authenticateUser(createSessionDto.email, createSessionDto.password)
-    console.log(res)
-    return "Login"
+  async login(@Req() request: RequestWithUser): Promise<User>{
+    const user = request.user;
+    user.password = undefined;
+    return user
   }
 }
