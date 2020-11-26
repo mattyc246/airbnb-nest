@@ -17,6 +17,12 @@ export class ListingsController {
     return this.listingsService.create(listing, request.user);
   }
 
+  @Get('/me')
+  @UseGuards(JwtAuthenticationGuard)
+  findAllByMe(@Req() request: RequestWithUser) {
+    return this.listingsService.findAllByUser(request.user)
+  }
+
   @Get()
   findAll() {
     return this.listingsService.findAll();
