@@ -16,7 +16,6 @@ export class UsersService {
     try {
       const newUser = await this.usersRepository.create(user);
       await this.usersRepository.save(newUser)
-      newUser.password = undefined
       return newUser;
     } catch (error) {
       if(error?.code === PostgresErrorCode.UniqueViolation){

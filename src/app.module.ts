@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import * as Joi from "@hapi/joi"
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ConfigModule } from '@nestjs/config';
+import { ListingsModule } from './listings/listings.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { ConfigModule } from '@nestjs/config';
       })
     }),
     UsersModule,
-    AuthenticationModule
+    AuthenticationModule,
+    ListingsModule
   ],
   controllers: [AppController]
 })

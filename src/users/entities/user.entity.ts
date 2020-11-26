@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from "typeorm"
+import { Exclude } from "class-transformer";
+import { Listing } from "src/listings/entities/listing.entity";
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, OneToMany } from "typeorm"
 const bcrypt = require('bcrypt')
 
 @Entity()
@@ -13,10 +15,15 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToMany(() => Listing, (listing: Listing) => listing.user)
+  listings: Listing[]
+
 
   @BeforeInsert()
   async hashPassword() {

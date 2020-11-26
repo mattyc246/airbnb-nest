@@ -1,0 +1,45 @@
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PostgresErrorCode } from 'src/database/postgresErrorCodes.enum';
+import { User } from 'src/users/entities/user.entity';
+import { Repository } from 'typeorm';
+import { CreateListingDto } from './dto/create-listing.dto';
+import { UpdateListingDto } from './dto/update-listing.dto';
+import { Listing } from './entities/listing.entity';
+
+@Injectable()
+export class ListingsService {
+  constructor(
+    @InjectRepository(Listing)
+    private listingsRepository: Repository<Listing>
+  ){}
+
+  async create(listing: CreateListingDto, user: User): Promise<Listing> {
+    try {
+      let newListing = this.listingsRepository.create({...listing, user: user})
+      await this.listingsRepository.save(newListing)
+      return newListing;
+    } catch (error) {
+      if(error?.code === PostgresErrorCode.UniqueViolation){
+        throw new HttpException('Name already exists', HttpStatus.BAD_REQUEST)
+      }
+      throw new HttpException('Something went wrong', HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+  }
+
+  findAll() {
+    return `This action returns all listings`;
+  }
+
+  findOne(id: number) {
+    return `This action returns a #${id} listing`;
+  }
+
+  update(id: number, updateListingDto: UpdateListingDto) {
+    return `This action updates a #${id} listing`;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} listing`;
+  }
+}
