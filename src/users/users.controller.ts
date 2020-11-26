@@ -23,7 +23,6 @@ export class UsersController {
   @UseGuards(JwtAuthenticationGuard)
   async findMe(@Req() request: RequestWithUser): Promise<User> {
     const user = request.user;
-    user.password = undefined;
     return user;
   }
 }
