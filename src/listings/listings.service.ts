@@ -27,8 +27,12 @@ export class ListingsService {
     }
   }
 
+  async findAllByUser(user: User): Promise<Listing[]> {
+    return await this.listingsRepository.find({ where: { user: user }})
+  }
+
   findAll() {
-    return `This action returns all listings`;
+    return this.listingsRepository.find();
   }
 
   findOne(id: number) {
