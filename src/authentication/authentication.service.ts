@@ -20,6 +20,10 @@ export class AuthenticationService {
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_EXPIRATION_TIME')}`;
   }
 
+  public cookieForLogout(){
+    return `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+  }
+
   public async authenticateUser(email: string, hashedPassword: string) {
     try {
       const user = await this.usersService.getByEmail(email);
