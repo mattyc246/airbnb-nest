@@ -44,6 +44,6 @@ export class ListingsService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} listing`;
+    return this.listingsRepository.delete(id);
   }
 }

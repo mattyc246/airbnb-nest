@@ -39,6 +39,7 @@ export class ListingsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthenticationGuard)
   remove(@Param('id') id: string) {
     return this.listingsService.remove(+id);
   }
