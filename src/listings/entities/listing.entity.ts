@@ -1,5 +1,6 @@
+import { Booking } from "src/bookings/entities/booking.entity";
 import { User } from "src/users/entities/user.entity";
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from "typeorm"
 
 @Entity()
 export class Listing {
@@ -17,6 +18,9 @@ export class Listing {
 
   @Column()
   noOfGuests: number;
+
+  @OneToMany(() =>  Booking, (booking: Booking) => booking.listing)
+  bookings: Booking[]
 
   @ManyToOne(() => User, (user: User) => user.listings)
   user: User;

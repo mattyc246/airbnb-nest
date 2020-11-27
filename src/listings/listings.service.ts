@@ -35,8 +35,8 @@ export class ListingsService {
     return this.listingsRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} listing`;
+  findOne(id: string) {
+    return this.listingsRepository.findOne(id)
   }
 
   async update(id: number, listing: UpdateListingDto) {
