@@ -39,8 +39,13 @@ export class ListingsService {
     return `This action returns a #${id} listing`;
   }
 
-  update(id: number, updateListingDto: UpdateListingDto) {
-    return `This action updates a #${id} listing`;
+  async update(id: number, listing: UpdateListingDto) {
+    await this.listingsRepository.update(id, listing)
+    const updatedListing = this.listingsRepository.findOne(id)
+    if(updatedListing){
+      return updatedListing
+    }
+    throw new HttpException('Listing not found', HttpStatus.NOT_FOUND)
   }
 
   remove(id: number) {
