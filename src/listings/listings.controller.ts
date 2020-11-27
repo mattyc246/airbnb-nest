@@ -34,6 +34,7 @@ export class ListingsController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthenticationGuard)
   update(@Param('id') id: string, @Body() updateListingDto: UpdateListingDto) {
     return this.listingsService.update(+id, updateListingDto);
   }
