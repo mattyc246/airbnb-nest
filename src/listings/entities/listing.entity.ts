@@ -1,3 +1,4 @@
+import { Expose } from "class-transformer";
 import { Booking } from "src/bookings/entities/booking.entity";
 import { User } from "src/users/entities/user.entity";
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from "typeorm"

@@ -1,11 +1,14 @@
-import { Controller, Get, Post, Body, Param, Delete, Req, UseGuards, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Req, UseGuards, HttpException, HttpStatus, UseInterceptors } from '@nestjs/common';
 import JwtAuthenticationGuard from 'src/authentication/guards/jwtAuthentication.guard';
 import { RequestWithUser } from 'src/authentication/interfaces/requestWithUser.interface';
 import { ListingsService } from 'src/listings/listings.service';
+import { TransformInterceptor } from 'src/users/transform.interceptor';
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 
 @Controller('bookings')
+@UseInterceptors(TransformInterceptor)
+
 export class BookingsController {
   constructor(
     private readonly bookingsService: BookingsService,

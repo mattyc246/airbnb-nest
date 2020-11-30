@@ -32,11 +32,15 @@ export class ListingsService {
   }
 
   findAll() {
-    return this.listingsRepository.find();
+    return this.listingsRepository.find({ relations: ['user']});
   }
 
-  findOne(id: string) {
-    return this.listingsRepository.findOne(id)
+  async findOne(id: string) {
+    let listing = await this.listingsRepository.findOne(id)
+    if(listing){
+      return listing
+    }
+    throw new HttpException('No listing found with this id', HttpStatus.NOT_FOUND)
   }
 
   async update(id: number, listing: UpdateListingDto) {

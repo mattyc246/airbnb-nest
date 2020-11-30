@@ -1,5 +1,5 @@
 export class CreateBookingDto {
-  startDate: Date;
-  endDate: Date;
+  checkIn: Date;
+  checkOut: Date;
   noOfGuests: number;
 }

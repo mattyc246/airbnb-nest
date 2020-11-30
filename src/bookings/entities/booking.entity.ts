@@ -8,10 +8,10 @@ export class Booking {
   id: number;
 
   @Column()
-  startDate: Date;
+  checkIn: Date;
 
   @Column()
-  endDate: Date;
+  checkOut: Date;
 
   @Column()
   noOfGuests: number;
