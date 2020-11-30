@@ -1,4 +1,5 @@
 import { Exclude } from "class-transformer";
+import { Booking } from "src/bookings/entities/booking.entity";
 import { Listing } from "src/listings/entities/listing.entity";
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, OneToMany } from "typeorm"
 const bcrypt = require('bcrypt')
@@ -23,6 +24,9 @@ export class User {
 
   @OneToMany(() => Listing, (listing: Listing) => listing.user)
   listings: Listing[]
+
+  @OneToMany(() => Booking, (booking: Booking) => booking.user)
+  bookings: Booking[]
 
 
   @BeforeInsert()
