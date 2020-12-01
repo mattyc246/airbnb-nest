@@ -4,7 +4,7 @@ import { Listing } from 'src/listings/entities/listing.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateBookingDto } from './dto/create-booking.dto';
-import { Booking } from './entities/booking.entity';
+import { Booking, PaymentStatus } from './entities/booking.entity';
 
 @Injectable()
 export class BookingsService {
@@ -12,6 +12,7 @@ export class BookingsService {
     @InjectRepository(Booking)
     private bookingsRepository: Repository<Booking>
   ){}
+
   async create(createBookingDto: CreateBookingDto, listing: Listing, user: User) {
     try {
       const newBooking = this.bookingsRepository.create({...createBookingDto, user: user, listing: listing})
@@ -22,15 +23,15 @@ export class BookingsService {
     }
   }
 
-  findAll(user: User) {
-    return `This action returns all users bookings`;
+  async findAllUserBookings(user: User) {
+    return await this.bookingsRepository.find({where: {user: user}, relations: ['listing']});
   }
 
   findOne(id: number) {
     return `This action returns a #${id} booking`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} booking`;
+  async cancel(id: number) {
+    return await this.bookingsRepository.update(id, {paymentStatus: PaymentStatus.CANCELLED})
   }
 }

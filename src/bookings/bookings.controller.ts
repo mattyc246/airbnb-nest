@@ -27,10 +27,10 @@ export class BookingsController {
     return this.bookingsService.create(createBookingDto, listing, request.user);
   }
 
-  @Get()
+  @Get('/me')
   @UseGuards(JwtAuthenticationGuard)
   findAll(@Req() request: RequestWithUser) {
-    return this.bookingsService.findAll(request.user);
+    return this.bookingsService.findAllUserBookings(request.user);
   }
 
   @Get(':id')
@@ -42,6 +42,6 @@ export class BookingsController {
   @Delete(':id')
   @UseGuards(JwtAuthenticationGuard)
   remove(@Param('id') id: string) {
-    return this.bookingsService.remove(+id);
+    return this.bookingsService.cancel(+id);
   }
 }
