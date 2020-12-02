@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Listing } from 'src/listings/entities/listing.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Repository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { Booking, PaymentStatus } from './entities/booking.entity';
 
@@ -25,6 +25,14 @@ export class BookingsService {
 
   async findAllUserBookings(user: User) {
     return await this.bookingsRepository.find({where: {user: user}, relations: ['listing']});
+  }
+
+  async findAllUserListingBookings(user: User){
+    return await getRepository(Booking)
+    .createQueryBuilder("booking")
+    .leftJoinAndSelect("booking.listing", "listing")
+    .where("listing.user = :user", {user: user.id})
+    .getMany()
   }
 
   findOne(id: number) {

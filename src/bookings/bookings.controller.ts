@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Param, Delete, Req, UseGuards, HttpException, HttpStatus, UseInterceptors } from '@nestjs/common';
+import { request } from 'http';
 import JwtAuthenticationGuard from 'src/authentication/guards/jwtAuthentication.guard';
 import { RequestWithUser } from 'src/authentication/interfaces/requestWithUser.interface';
 import { ListingsService } from 'src/listings/listings.service';
@@ -31,6 +32,12 @@ export class BookingsController {
   @UseGuards(JwtAuthenticationGuard)
   findAll(@Req() request: RequestWithUser) {
     return this.bookingsService.findAllUserBookings(request.user);
+  }
+
+  @Get('/listings/me')
+  @UseGuards(JwtAuthenticationGuard)
+  findAllListingBookings(@Req() request: RequestWithUser) {
+    return this.bookingsService.findAllUserListingBookings(request.user)
   }
 
   @Get(':id')
